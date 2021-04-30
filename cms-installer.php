@@ -57,6 +57,7 @@ class installer
         'opencart-2.3.0.2' => ['/config.php', '/admin/config.php'],
         'ocstore-3.0.2.0' => ['/config.php', '/admin/config.php'],
         'ocstore-2.3.0.2.3' => ['/config.php', '/admin/config.php'],
+        'wordpress-5.7.1-uk' => ['/wp-config.php'],
         'wordpress-5.5.1-uk' => ['/wp-config.php'],
         'wordpress-4.9.15-uk' => ['/wp-config.php'],
         'joomla-3.9.21' => ['/configuration.php'],
