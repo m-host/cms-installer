@@ -16,6 +16,7 @@ class installer
             'ocstore-2.3.0.2.3' => 'ocStore 2.3.0.2.3 (rus)',
         ],
         'WordPress' => [
+            'wordpress-5.7.1-uk' => 'WordPress 5.7.1 (ukr)',
             'wordpress-5.5.1-uk' => 'WordPress 5.5.1 (ukr)',
             'wordpress-4.9.15-uk' => 'WordPress 4.9.15 (ukr)',
         ],
@@ -39,6 +40,7 @@ class installer
     private $cms_links = [
         'opencart-3.0.3.6' => 'http://m-host.net/data/cms/opencart-3.0.3.6.zip',
         'opencart-2.3.0.2' => 'http://m-host.net/data/cms/opencart-2.3.0.2.zip',
+        'wordpress-5.7.1-uk' => 'http://m-host.net/data/cms/wordpress-5.7.1-uk.zip',
         'wordpress-5.5.1-uk' => 'http://m-host.net/data/cms/wordpress-5.5.1-uk.zip',
         'wordpress-4.9.15-uk' => 'http://m-host.net/data/cms/wordpress-4.9.15-uk.zip',
         'joomla-3.9.21' => 'http://m-host.net/data/cms/joomla-3.9.21.zip',
@@ -193,6 +195,12 @@ class installer
 
             if (!empty($sql_queries)) {
                 foreach ($sql_queries as $sql_query) {
+
+                    $sql_query = trim($sql_query);
+
+                    if (empty($sql_query)) {
+                        continue;
+                    }
 
                     $sql_query = mb_convert_encoding($sql_query, 'UTF-8');
 
