@@ -69,7 +69,7 @@ class cms_installer
 
     private $post;
     private $db;
-    
+
     public function __construct()
     {
         $this->post = new stdClass();
@@ -274,6 +274,13 @@ new cms_installer();
             background-color: #2a8abf;
             color: #ddf4fc;
         }
+        div.alert,
+        div.notice
+        {
+            padding: 20px;
+            display: block;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -440,11 +447,17 @@ new cms_installer();
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="alert notice">After installation you should immediately change an Admin username and password in Admin panel of CMS from defaults to own !</div>
+        </div>
+        <br>
+        <hr>
         <br>
         <div class="row">
             <button type="submit" class="btn btn-big">Start installation</button>
         </div>
     </form>
+    <br>
     <br>
     <br>
 </div>
