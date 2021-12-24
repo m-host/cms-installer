@@ -1,13 +1,14 @@
 <?php
 
 error_reporting(E_ERROR);
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 ini_set('max_execution_time', 1800);
 
 class cms_installer
 {
     public static $cms_list = [
         'OpenCart' => [
+            'opencart-3.0.3.8' => 'OpenCart 3.0.3.8',
             'opencart-3.0.3.6' => 'OpenCart 3.0.3.6',
             'opencart-2.3.0.2' => 'OpenCart 2.3.0.2',
         ],
@@ -16,6 +17,7 @@ class cms_installer
             'ocstore-2.3.0.2.3' => 'ocStore 2.3.0.2.3 (rus)',
         ],
         'WordPress' => [
+            'wordpress-5.8.2-uk' => 'WordPress 5.8.2 (ukr)',
             'wordpress-5.7.1-uk' => 'WordPress 5.7.1 (ukr)',
             'wordpress-5.5.1-uk' => 'WordPress 5.5.1 (ukr)',
             'wordpress-4.9.15-uk' => 'WordPress 4.9.15 (ukr)',
@@ -38,11 +40,13 @@ class cms_installer
     ];
 
     private $cms_links = [
+        'opencart-3.0.3.8' => 'http://m-host.net/data/cms/opencart-3.0.3.8.zip',
         'opencart-3.0.3.6' => 'http://m-host.net/data/cms/opencart-3.0.3.6.zip',
         'opencart-2.3.0.2' => 'http://m-host.net/data/cms/opencart-2.3.0.2.zip',
         'wordpress-5.7.1-uk' => 'http://m-host.net/data/cms/wordpress-5.7.1-uk.zip',
         'wordpress-5.5.1-uk' => 'http://m-host.net/data/cms/wordpress-5.5.1-uk.zip',
         'wordpress-4.9.15-uk' => 'http://m-host.net/data/cms/wordpress-4.9.15-uk.zip',
+        'wordpress-5.8.2-uk' => 'http://m-host.net/data/cms/wordpress-5.8.2-uk.zip',
         'joomla-3.9.21' => 'http://m-host.net/data/cms/joomla-3.9.21.zip',
         'drupal-9.0.5' => 'http://m-host.net/data/cms/drupal-9.0.5.zip',
         'prestashop-1.7.6.7' => 'http://m-host.net/data/cms/prestashop-1.7.6.7.zip',
@@ -53,6 +57,7 @@ class cms_installer
     ];
 
     private $cms_configs = [
+        'opencart-3.0.3.8' => ['/config.php', '/admin/config.php'],
         'opencart-3.0.3.6' => ['/config.php', '/admin/config.php'],
         'opencart-2.3.0.2' => ['/config.php', '/admin/config.php'],
         'ocstore-3.0.2.0' => ['/config.php', '/admin/config.php'],
@@ -60,6 +65,7 @@ class cms_installer
         'wordpress-5.7.1-uk' => ['/wp-config.php'],
         'wordpress-5.5.1-uk' => ['/wp-config.php'],
         'wordpress-4.9.15-uk' => ['/wp-config.php'],
+        'wordpress-5.8.2-uk' => ['/wp-config.php'],
         'joomla-3.9.21' => ['/configuration.php'],
         'drupal-9.0.5' => ['/sites/default/settings.php'],
         'prestashop-1.7.6.7' => ['/app/config/parameters.php','/mails/uk/order_conf.html','/.htaccess','/modules/ps_emailalerts/mails/uk/new_order.html','/modules/ps_emailalerts/mails/uk/return_slip.html',],
@@ -127,16 +133,25 @@ class cms_installer
         }
 
         $cms_file_zip_path = $document_root . '/' . $zip_name;
+        $cms_installer_path = $document_root . '/cms-installer.php';
 
         if (!is_file($cms_file_zip_path)) {
 
-            $cms_zip = @file_get_contents($cms_link);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $cms_link);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $cms_zip = curl_exec($ch);
+            curl_close($ch);
 
             if (empty($cms_zip)) {
                 die('ERROR: we can\'t download CMS from m-host.net server. Ask support@m-host.net please.');
             }
 
-            if (!file_put_contents($document_root . '/' . $zip_name, $cms_zip)) {
+            if (!file_put_contents($cms_file_zip_path, $cms_zip)) {
                 die('ERROR: we can\'t store CMS in root directory. Check permissions please.');
             }
         }
@@ -206,7 +221,7 @@ class cms_installer
         }
 
         unlink($cms_file_zip_path);
-
+        unlink($cms_installer_path);
 
         $this->redirect('http://' . $_SERVER['HTTP_HOST'] . '/');
 
@@ -249,7 +264,6 @@ new cms_installer();
             margin: 0 auto;
         }
         .cms-row input[type="radio"] {
-            visibility: hidden;
             position: absolute;
             opacity: 0;
             top: 0;
@@ -377,6 +391,7 @@ new cms_installer();
             <h3><?=$group_name?></h3>
             <div class="row cms-row">
             <?php
+            krsort($cms_arr);
             foreach ($cms_arr as $cms_key => $cms_name) {
                 ?>
                 <div class="w20 md-w25 sm-50 xs-w50">
