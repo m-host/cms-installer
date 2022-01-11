@@ -7,29 +7,32 @@ ini_set('max_execution_time', 1800);
 class cms_installer
 {
     public static $cms_list = [
-        'OpenCart' => [
-            'opencart-3.0.3.8' => 'OpenCart 3.0.3.8',
-            'opencart-3.0.3.6' => 'OpenCart 3.0.3.6',
-            'opencart-2.3.0.2' => 'OpenCart 2.3.0.2',
-        ],
-        'ocStore' => [
-            'ocstore-3.0.2.0' => 'ocStore 3.0.2.0 (rus)',
-            'ocstore-2.3.0.2.3' => 'ocStore 2.3.0.2.3 (rus)',
-        ],
         'WordPress' => [
             'wordpress-5.8.2-uk' => 'WordPress 5.8.2 (ukr)',
             'wordpress-5.7.1-uk' => 'WordPress 5.7.1 (ukr)',
             'wordpress-5.5.1-uk' => 'WordPress 5.5.1 (ukr)',
             'wordpress-4.9.15-uk' => 'WordPress 4.9.15 (ukr)',
         ],
-        'Joomla' => [
-            'joomla-3.9.21' => 'Joomla! 3.9.21 (ukr)',
+        'OpenCart' => [
+            'opencart-3.0.3.8' => 'OpenCart 3.0.3.8',
+            'opencart-3.0.3.6' => 'OpenCart 3.0.3.6',
+            'opencart-2.3.0.2' => 'OpenCart 2.3.0.2',
+        ],
+        'PrestaShop' => [
+            'prestashop-1.7.6.7' => 'PrestaShop 1.7.6.7 (ukr)',
+        ],
+        'ocStore' => [
+            'ocstore-3.0.2.0' => 'ocStore 3.0.2.0 (rus)',
+            'ocstore-2.3.0.2.3' => 'ocStore 2.3.0.2.3 (rus)',
         ],
         'Drupal' => [
             'drupal-9.0.5' => 'Drupal 9.0.5 (ukr)',
         ],
-        'PrestaShop' => [
-            'prestashop-1.7.6.7' => 'PrestaShop 1.7.6.7 (ukr)',
+        'Joomla' => [
+            'joomla-3.9.21' => 'Joomla! 3.9.21 (ukr)',
+        ],
+        'TYPO3' => [
+            'typo3-11.5.5' => 'TYPO3 11.5.5 (eng)',
         ],
         'phpBB' => [
             'phpbb-3.3.1' => 'phpBB 3.3.1',
@@ -37,49 +40,61 @@ class cms_installer
         'MyBB' => [
             'mybb-1.8.24' => 'MyBB 1.8.24',
         ],
+        /**
+         * TODO:
+         * DLE - ? (trial only, not open-source)
+         * magento ? - high-load
+         * Microweber.org
+         * PyroCMS ?
+         * silverstripe.org ?
+         * fork-cms.com
+         */
     ];
 
     public static $cms_icons = [
-        'OpenCart' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+ElEQVQ4jcXPMUoDQRiG4VzC2srauCmCF7AQvIFo4RXsLAQv4AmEHCGpbBRjMZNmCxWLsFqILMYEEmc0s9nZDLw2FplMhDUW+eBj4Gfm4Z8K/0xl9UBiHI00Xx6wDo67hp1Yc/j4xelzxvlLxkWaB22kOdfDgjfrwi80+5bdWFPvaGpSEUlFJPxuCUX15wyA+VgH2UyVg5517N+P2bgtASyKKiASmqMH83fg3cLBneHsaeLNSwOXgyntkQvmHvA6cbQG1rsg1ZSuCR8uBOodTVUoTpIMgMQ4NoWiJhW/ER6wF49Zu9I0ewUAHxbWbzTb8rPcBstk9cA3nGPV9klC2ccAAAAASUVORK5CYII=',
-        'ocStore' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADV0lEQVQ4jXWTbUzUBQDGL3HrOEzw7l/g3Q7nZGVjSQyEURZngIAkEIJMXgSC3tYHP7S2LHtZa2225mbQoc1URpAxRWS8nsohOLlzyPGSwW2gcOftuDsC7vAOurt/vz7UVtF6Pj8vX56fRLJO+C2JuOe+YXbKJE6MOgLjJoc4O2XCbanFZ05a7/87CFIx8OgUtwcDa199iefoO/xacwR7VSnWN6uwffIhK33XAojuWiD0P2FWPR18p2Xt9RLWqkvxvVGOu6YMV9VhHpYfYrool4ncTOZOfEHwkbv7XyWiuHZKPF1HsPQgVJdBVQm/VRTjKS/CVVKArTifmaJc7r2WjXFvCtOffwxBb91f60vxDPYHFw/lYTtSjL8wFwpyEAtz8RXmsFSQjT0vkwevpjGZrWEkfQ/6pDicnW0iLCdK8DlrPcePsZSfhevYe0xq6xj94H1GqiswFOZzKy8Lfc4+evancyVDw5UMDdd278JYfhhW7PUSHpjH5ksLWTiYgyc/i7Wjb+E7e4bF7g7mbw1gGxrCahji4R0jLquVRY+He59+xNWd2/FOjk5IVgf0LnNiLLacNBwHMnDue4n5lxOwpyZhe+VFLFkapjM1DCc9x53T9fitFvR7X6A5Mpz5G71OibdP5zIoHmciRon5+aeZSY5jLiWBmZR4zMlx/JwYy+iuGNrjn8V48msG9yTSImziQoQUu67bKfH/MjJ2e3skRrWc4WgFpmgFNwUZhq2bubsjihvKcLrkUvpid3B95zYuCZu4qJTToBLwjA9PSPA66kz709E/JcOwTaBdKedmUyPzJ0/QG7aBtnffxqrr5foz0bRGbuaSWuC8PJT2tFTwus5IYDnB9VOT2PnERvRqBR1qAedAP86mBtqkjzH+2XG85im6Y2NoiQqnSSWglYVwv7nhd3Dv/vMLQV/tWE0lrbIQelQKetQKOlVyOtQC7coIWlUKWpRyflAJaKUb6K8sQwyu1v/zyqFB93L33eoKfgzbSMsWKZe3RnBZJdCiUtAUFcH38lC0shD6K8sIuBd0QNh6HkLxL9RZmhuDugwNzaonObdFytkIKedVAlfTUrnfeE4kuFIPyP6fSr81GbflW8+4cdSu63LYdV2OFZNhDLdFS2A2Zb3/DwATSw1jaSv4AAAAAElFTkSuQmCC',
         'WordPress' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABcklEQVQ4ja2TMY6DMBBFZxsOEw7AWbgAB0LiBsgcIE0o6BASEuQAYykFRRCIwjJCAiw0W0TjONlss9rCjZn/+W9mDED09XKE9EFgDCm2XobGy9BAii0IjEFI/0f9qxhjL0MTln1RjWujN6P1ZnQ1rk1Y9oWXoQGB8WeDFNvT+XaV8z4lqCjIO+IEQd5RgorkvE+n8+0KKbavBgJjFrvC9xPVA+nN6NP5drVJQEjfy9DIeZ+ieqCoHoiL3eNlaA4iOohIb0Y/cKQPIDAOy77gj5f7Yg34jlNd7os1CMu+AIExQIptNa4NC9jAFXCCIO/oIKIEFVXj2kCKLXgZGo4k5306iMhlfjflRBbDNWAB/zFBZTE4gZz3ydVYBOY8iGyRnPfJxbjcF4rqgYK8eyJwExNU9M6doCJOJed9YuMEFT2b6IwxyDsr0JvRbiruhYvxGOOHRXJn7fYiqofnNtpF+rDKejOakdzm/r7K//KY/vicvwH0XtQaYiixMQAAAABJRU5ErkJggg==',
-        'Joomla' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADIElEQVQ4jYWRW0gUcRTGz3NPQaXsjAVl0U1DqxkRjWZntlWI2J2FCiTUKKkHH6KL4e5qFhZboO5OZfd2tiJS7EL54oVqZjURm7WLZfXQhYii2pl13ZlZozo9bLvdHjrwcf78D7+Pw/mgIWxf4ZG4p26J++yRuUb4TxkholYXLR8N0fIqGSJs4JHY9x6JxYxkdrtXsrM77jinpyE8Mzc7GSJshkhuMEQC9aAFDdGChkiY4M6AHKbfDbIVq/vtZtOgnTVCObx+mjRSEIG/G+hBC4I3zO3ySCy6JRYbZBbdEocbe8q/VfSVTY5cXRpJHCfR7MzGqWtZph5MQXrQgrpoQSNI+AAAwCNzjW6JxXqZVesGyhcCADzsWnJjsi3na/LaLDSOzrsOAGB0ECWGSJh60IJGiNiTOYxXttV4ZA439ZWPAAAkWuZUJo6RX83OLDTa575UC6lBjSyxAgCYN2ZM6OcJTIYIW8agQV6z2iuzWNlXNtXRU9Q22To7mjhLoHEuR1DpfJ9KLEc1twjj2wsOJm/NjJsdWTh1mVj0RzyNYbZ5X5jFTb12vN5LP45dJN3pmbao4JKatxijucUY35H/0OwktvyTb+Xpbtvenq1vGmUrbu23Y+uAtSI9qz/UVfV+TenrKLkA1RXFRsJJFfwBr/ePLHQ0DyDfMvTc3Vtx1yuzuPOODbfdXufIP/6oFk6O4+bW2+MvHNywmrcE1QIKJwtXzcoY8MJoDR9Q0HEg/AQAwDfIdDUNcB+qznU9Xn94CKe1jyFceLsfAECdPV/VGApjNurXEV2B0Xo+oCDfev91+q9a7OzmDw4inBrHupabVzL3KC2MacxKnGDp2hQsjFa7BMXkAwryQgRdbSNjDt/QTf7IMOa0j2GT7/IzddnSe1FyQb9WWvg2xhWhxlAYY6jvcStdB3xAwd/l9Kd6ydEH6BCG3VGmeHeUzEWNK0KNWYkaQ/3sKYFLUL44/Qo6/fdTBgHlFO+P7F9+Yqwsszadx0+wdHPMSh/RVqdNUgKXMLqWFyLvnH4l7hIi7f/k+1dpVuqAZqUnYgz1Kc7QVT8A9RbVxtw34xQAAAAASUVORK5CYII=',
-        'Drupal' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABM0lEQVQ4jZWTv04CQRDG7wH0BWxMeAJjQWgojNT4t5u905zaSGlhTEwI0Ucw+BYUxo5yZo+exJ6ngFD9bPaOE3IHbrLFzjffN9/M7kZRzYqVd/G81eVUk41LURAFl3H+L7IoFzk534nnbLfKSq+o7LkSz3V+jpVeLdkZw4Js3BeinodSfFhV+VUUnLJIlM46nigdpyxEITZe/oB3nsO8wq3nqNLhhOM8LzUOVoDyLApifNT2GEWRGJ9hHk/l3r9FITFOtgpknIZZfK2Cyjg4aO3goBXaGJcdDIPAzTYBpyQbt+GMbghOtgoYk5DbXbc2DVc0qCLHxiA4nW6ASUaz9FhGqdLIsVRpOGNUPOuMZpW9thjz4g8YSzGWpfPcGe3aHh9/2HOevhizEnHmPP3U2F/P/wUHBi6JTd6BZgAAAABJRU5ErkJggg==',
+        'OpenCart' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+ElEQVQ4jcXPMUoDQRiG4VzC2srauCmCF7AQvIFo4RXsLAQv4AmEHCGpbBRjMZNmCxWLsFqILMYEEmc0s9nZDLw2FplMhDUW+eBj4Gfm4Z8K/0xl9UBiHI00Xx6wDo67hp1Yc/j4xelzxvlLxkWaB22kOdfDgjfrwi80+5bdWFPvaGpSEUlFJPxuCUX15wyA+VgH2UyVg5517N+P2bgtASyKKiASmqMH83fg3cLBneHsaeLNSwOXgyntkQvmHvA6cbQG1rsg1ZSuCR8uBOodTVUoTpIMgMQ4NoWiJhW/ER6wF49Zu9I0ewUAHxbWbzTb8rPcBstk9cA3nGPV9klC2ccAAAAASUVORK5CYII=',
         'PrestaShop' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACkElEQVQ4ja2TS0hUcRSHT7WpkLA2RYtAmrIyNamkxgc59mBoUXP/99556FBRhKBkSkFi6VCQVIYEtWhVYbnJoIWl4gMdKISsSMmCUmsyRWZKHJo0G+drEUrQC6Jv//0O/M45Iv+bvLy8RYZhFCml2pVSg7quP9N1vdrj8az6q6zrukvTtEnDMHB7PDhdLpRSKKXQNA3TNK/8VjYMo1TTNPLy8zFNE1tODrm5NpxOJ06nE7fHg91ux2KxNP1KTteVwuv1kpaaQnxcHJaEBNKSk1mXuIqN6ZnssDvYlJZKYUEByuGomJXdbvdSwzDrDdMgJXk92RmZXKy5xN2GRppa2mlqauXC6eNkZG+lrrkZgO5H3aGGhobFM9MPapo2YcvZxomycp70vmBgaITASJBW/0NeBMaB5wzUbGP0yTuGmKK39zktLf4934tT6kKG1cqRklJ6Xr6mud3Ptdo6yk5V4vXuo6jUR9/TFiZbrXQkmgzdH+DUjRru3L5TKSIimVbrRUPX6R98y4excYKhj3R0dlJVVcWWzZvI2u6ET37a6lM5Jtn0yxEaL99inOnTIiKSlJR0uLq6+gu/IBKJEAUYvkxm+hzOSz49cohXG84Qaew7KCIixcXFK7q6uu4BxGIxYrEYAMFgkMjENBDDtW8t62QlbxaU83jhcR7NK+SBuEc7xfCIiAhgm5FnAkKhELW1Nyk5WoTEz+fqknwCC07StqiQ+4sLqF2+/3X98sN7Z9cJ+ACIMRsy8fkzO3ftREQoXZbLdct+zq02qEhyXPf5fHN/OqhwOHwgGo1+/bGH4ffD2Bx2dqdYozWJrrazKXrWH/9hbGwsvr//1YlAIOAPh8N9QHdkeupq/bW6NX8U/5VvBA/CE50EzScAAAAASUVORK5CYII=',
+        'ocStore' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADV0lEQVQ4jXWTbUzUBQDGL3HrOEzw7l/g3Q7nZGVjSQyEURZngIAkEIJMXgSC3tYHP7S2LHtZa2225mbQoc1URpAxRWS8nsohOLlzyPGSwW2gcOftuDsC7vAOurt/vz7UVtF6Pj8vX56fRLJO+C2JuOe+YXbKJE6MOgLjJoc4O2XCbanFZ05a7/87CFIx8OgUtwcDa199iefoO/xacwR7VSnWN6uwffIhK33XAojuWiD0P2FWPR18p2Xt9RLWqkvxvVGOu6YMV9VhHpYfYrool4ncTOZOfEHwkbv7XyWiuHZKPF1HsPQgVJdBVQm/VRTjKS/CVVKArTifmaJc7r2WjXFvCtOffwxBb91f60vxDPYHFw/lYTtSjL8wFwpyEAtz8RXmsFSQjT0vkwevpjGZrWEkfQ/6pDicnW0iLCdK8DlrPcePsZSfhevYe0xq6xj94H1GqiswFOZzKy8Lfc4+evancyVDw5UMDdd278JYfhhW7PUSHpjH5ksLWTiYgyc/i7Wjb+E7e4bF7g7mbw1gGxrCahji4R0jLquVRY+He59+xNWd2/FOjk5IVgf0LnNiLLacNBwHMnDue4n5lxOwpyZhe+VFLFkapjM1DCc9x53T9fitFvR7X6A5Mpz5G71OibdP5zIoHmciRon5+aeZSY5jLiWBmZR4zMlx/JwYy+iuGNrjn8V48msG9yTSImziQoQUu67bKfH/MjJ2e3skRrWc4WgFpmgFNwUZhq2bubsjihvKcLrkUvpid3B95zYuCZu4qJTToBLwjA9PSPA66kz709E/JcOwTaBdKedmUyPzJ0/QG7aBtnffxqrr5foz0bRGbuaSWuC8PJT2tFTwus5IYDnB9VOT2PnERvRqBR1qAedAP86mBtqkjzH+2XG85im6Y2NoiQqnSSWglYVwv7nhd3Dv/vMLQV/tWE0lrbIQelQKetQKOlVyOtQC7coIWlUKWpRyflAJaKUb6K8sQwyu1v/zyqFB93L33eoKfgzbSMsWKZe3RnBZJdCiUtAUFcH38lC0shD6K8sIuBd0QNh6HkLxL9RZmhuDugwNzaonObdFytkIKedVAlfTUrnfeE4kuFIPyP6fSr81GbflW8+4cdSu63LYdV2OFZNhDLdFS2A2Zb3/DwATSw1jaSv4AAAAAElFTkSuQmCC',
+        'Drupal' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABM0lEQVQ4jZWTv04CQRDG7wH0BWxMeAJjQWgojNT4t5u905zaSGlhTEwI0Ucw+BYUxo5yZo+exJ6ngFD9bPaOE3IHbrLFzjffN9/M7kZRzYqVd/G81eVUk41LURAFl3H+L7IoFzk534nnbLfKSq+o7LkSz3V+jpVeLdkZw4Js3BeinodSfFhV+VUUnLJIlM46nigdpyxEITZe/oB3nsO8wq3nqNLhhOM8LzUOVoDyLApifNT2GEWRGJ9hHk/l3r9FITFOtgpknIZZfK2Cyjg4aO3goBXaGJcdDIPAzTYBpyQbt+GMbghOtgoYk5DbXbc2DVc0qCLHxiA4nW6ASUaz9FhGqdLIsVRpOGNUPOuMZpW9thjz4g8YSzGWpfPcGe3aHh9/2HOevhizEnHmPP3U2F/P/wUHBi6JTd6BZgAAAABJRU5ErkJggg==',
+        'Joomla' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADIElEQVQ4jYWRW0gUcRTGz3NPQaXsjAVl0U1DqxkRjWZntlWI2J2FCiTUKKkHH6KL4e5qFhZboO5OZfd2tiJS7EL54oVqZjURm7WLZfXQhYii2pl13ZlZozo9bLvdHjrwcf78D7+Pw/mgIWxf4ZG4p26J++yRuUb4TxkholYXLR8N0fIqGSJs4JHY9x6JxYxkdrtXsrM77jinpyE8Mzc7GSJshkhuMEQC9aAFDdGChkiY4M6AHKbfDbIVq/vtZtOgnTVCObx+mjRSEIG/G+hBC4I3zO3ySCy6JRYbZBbdEocbe8q/VfSVTY5cXRpJHCfR7MzGqWtZph5MQXrQgrpoQSNI+AAAwCNzjW6JxXqZVesGyhcCADzsWnJjsi3na/LaLDSOzrsOAGB0ECWGSJh60IJGiNiTOYxXttV4ZA439ZWPAAAkWuZUJo6RX83OLDTa575UC6lBjSyxAgCYN2ZM6OcJTIYIW8agQV6z2iuzWNlXNtXRU9Q22To7mjhLoHEuR1DpfJ9KLEc1twjj2wsOJm/NjJsdWTh1mVj0RzyNYbZ5X5jFTb12vN5LP45dJN3pmbao4JKatxijucUY35H/0OwktvyTb+Xpbtvenq1vGmUrbu23Y+uAtSI9qz/UVfV+TenrKLkA1RXFRsJJFfwBr/ePLHQ0DyDfMvTc3Vtx1yuzuPOODbfdXufIP/6oFk6O4+bW2+MvHNywmrcE1QIKJwtXzcoY8MJoDR9Q0HEg/AQAwDfIdDUNcB+qznU9Xn94CKe1jyFceLsfAECdPV/VGApjNurXEV2B0Xo+oCDfev91+q9a7OzmDw4inBrHupabVzL3KC2MacxKnGDp2hQsjFa7BMXkAwryQgRdbSNjDt/QTf7IMOa0j2GT7/IzddnSe1FyQb9WWvg2xhWhxlAYY6jvcStdB3xAwd/l9Kd6ydEH6BCG3VGmeHeUzEWNK0KNWYkaQ/3sKYFLUL44/Qo6/fdTBgHlFO+P7F9+Yqwsszadx0+wdHPMSh/RVqdNUgKXMLqWFyLvnH4l7hIi7f/k+1dpVuqAZqUnYgz1Kc7QVT8A9RbVxtw34xQAAAAASUVORK5CYII=',
+        'TYPO3' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACJklEQVQ4jW2Sz0sVURTHTwXWwiAj2kW0iJYRRLV0U9Eu6F9w1bpdRfr0+QYlLSmMikcKalSbIAkMC6GiIkuLiiwwSvqBBeK5c2fmzpv5tJjx+Xy+xXdzzznf+/2e8xVVRa1DY9Clv9i5CaLJC0QvB1AbshwmRFMF6N1O2tdCemU3yXAr4VQR/fcT0RD8359xE2dIBveBtwnOC9FUAXWgESRjx6FDoDtHl0BBiEePIvb9XejfAe15oSTQIbgn5zICB/GDtoygVIOikF7dhaTlA1AQ8GqKBaEyegwNE9RBNDOU9dQSdAnJSCuS3NwPxbpit0D/NvzFb2iYYha/k/a3ZO8rPZ1C9PgsUrl3CjrrCHIbwavBqo3Kw9OZzRWlvVsIfrxGoheXV72X1v6QDh3BBA4NYvw/X6GvJevtEOI7J9GwgpiFd3Cxea28Gp/2w300yq5h3w5D1wbobcZfmEWDGNEwIbl9Yv2SchXJrcOojTC+RcMEf+4RwfxTNKxgVBF1EM6ONCbILxI/70ETUD/ILhNkw8YYRH2LWV4ivba38S66Bbwm3MwQZmkRo8sYY6oQo4o6cNPXG6vwcpJ2IRlvwwQRxvg1BMZgjEV9n0r54PpQeXlCL+3E/vqIBq5OgTEYVTRK8eefgbd5NVheFlm8JuyncdRR9V4lUFWqcBBN34DixuzXToGerdjZseqw1mEtgTGog/BNmWRgD2n5EPbLZJbGBsOqyn+P/iIApd1fUQAAAABJRU5ErkJggg==',
         'phpBB' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACjElEQVQ4jX2RW0jTYRyGvxIPSCNvIqywogNamsqksEhLL9TQoNZEIp1mzgIrYrkUvRgZBmWa5ESd2UqxnIfMA9UyrRbZ0WQTU6zNtZPuv801NZ0be7sohG2u5/bjeeD3foR4AMAqT28eYTKZXlFZBXlptx/35dT0fo0vFtSHHWGGJSUl+YYfy0mOTOdmhyYy9ngM+MVlNdx6OoQp8xzmF5fw8YcO0dw648aMEmlpuwQNfZ/BKGu1kYjkQnd7a2RMYes7uDKqNiCz6gkcSwtYnDXDRE0jo6obZG1glJPvfyDt6qCccgsAQG5NN0bkKpiMBsxQU3j4ehhkVwLHKeCzj1HQP6ZbMXC2tgdytQ4mowHzJj0qez+AbDuY6XzC+pBQVu0zu6s8MDKJON4Dx3eVDlrdFLoHpQhhl34hJCDAbQZvesr59Ooe+5BcB43RAuHAMILOVdrCObXWh6+GIJtQIE/QC//ki22E8FY723S695p4dtUF4YvlQMf7b4jMr0O9+BPgWILJaMAvaholbRKQ7bGXnHzfQ6yyu2/H3e7Xzszi+I0WjCs1MBkN0Go0UCiV2M2+rjzN5dL+2uu2RJwRiG0rLgigWSJDUaMYvy1mqFQqGHVqcOo6cYrHTySEEEKLzxbItGZPPiwLVpysaAdFUZgx6KFWqXDt0Uvk1j8vJBWN7YEpJfe1Hu1/FDX3g3mzBenlornoy/wxWkLOvdz84h2kvONNbGpFJyb0FljtDjfRandgQm9BXpMEZOdhNvEL2EzodO/l8UQikY9P8H7GphP5jTHcalkmv8vEEYptHKHYxrrTZYy5wpcGpXKaaHuPsng8169zAYDX2E9qg1RhCJYqDMGjk1QggP9KfwA4RCWMczgaQwAAAABJRU5ErkJggg==',
         'MyBB' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABz0lEQVQ4jY2Tu2tUYRDFfxZqs8Q0gk3yHwgSBBsLUcQnopXaSAwBQQWxEa1yblgkQY0aQeM7CD7BRogpJCgIggoy57u5EV1CLIMI9jZrcZdssiYxUw3MOfOdMzMftIaKCnIvikEUD5AfoTSMfBLV2v7BLyTnm1E8R75Lls6i6CFLJ1C6gjyGPE6/tyxBjiEUH5G70Ew71byDat5Bf9rYxKRu5F8o3W8lDyKPlrkvIY8jv0f+hnyrVJAOzsP/bDaRDyDfQ8Ua5GkU58s5xFaUzqH4jmIExQ3kMQam1wHQF3WyOAzydZROo5gki12L2/ME8hvkDyh+o9iPvBvFD5CF4hOKniWHO1xb28ANoWIT8rtyuH4B8izy6+XXM6fEZPm+uVwxWXqRJ1bY4Cny5Ub+mL6og+Itij8rbPBlnoIpFAWo6Cwn6qPLkjNfQL7TIPfSF3Uu1tY3iulUaSXtXfhisYHMOxornCXzGVRrQ/6K3NUqbxTFCFm+E8XD8gZ8pLyHotLA3CyPyFMLLrRZtJFfIb9Evlp+Kh9DMYD8BPkaWdqD/Aylfur1VSW5mncgfybLDwFwu74a5dtQ6iZLx0sbM+0t9irNBio6kbf/dwuLxF+dxBVUKeRoYwAAAABJRU5ErkJggg==',
     ];
 
     private $cms_links = [
-        'opencart-3.0.3.8' => 'http://m-host.net/data/cms/opencart-3.0.3.8.zip',
-        'opencart-3.0.3.6' => 'http://m-host.net/data/cms/opencart-3.0.3.6.zip',
-        'opencart-2.3.0.2' => 'http://m-host.net/data/cms/opencart-2.3.0.2.zip',
         'wordpress-5.7.1-uk' => 'http://m-host.net/data/cms/wordpress-5.7.1-uk.zip',
         'wordpress-5.5.1-uk' => 'http://m-host.net/data/cms/wordpress-5.5.1-uk.zip',
         'wordpress-4.9.15-uk' => 'http://m-host.net/data/cms/wordpress-4.9.15-uk.zip',
         'wordpress-5.8.2-uk' => 'http://m-host.net/data/cms/wordpress-5.8.2-uk.zip',
-        'joomla-3.9.21' => 'http://m-host.net/data/cms/joomla-3.9.21.zip',
-        'drupal-9.0.5' => 'http://m-host.net/data/cms/drupal-9.0.5.zip',
-        'prestashop-1.7.6.7' => 'http://m-host.net/data/cms/prestashop-1.7.6.7.zip',
-        'phpbb-3.3.1' => 'http://m-host.net/data/cms/phpbb-3.3.1.zip',
-        'mybb-1.8.24' => 'http://m-host.net/data/cms/mybb-1.8.24.zip',
+        'opencart-3.0.3.8' => 'http://m-host.net/data/cms/opencart-3.0.3.8.zip',
+        'opencart-3.0.3.6' => 'http://m-host.net/data/cms/opencart-3.0.3.6.zip',
+        'opencart-2.3.0.2' => 'http://m-host.net/data/cms/opencart-2.3.0.2.zip',
         'ocstore-3.0.2.0' => 'http://m-host.net/data/cms/ocstore-3.0.2.0.zip',
         'ocstore-2.3.0.2.3' => 'http://m-host.net/data/cms/ocstore-2.3.0.2.3.zip',
+        'prestashop-1.7.6.7' => 'http://m-host.net/data/cms/prestashop-1.7.6.7.zip',
+        'drupal-9.0.5' => 'http://m-host.net/data/cms/drupal-9.0.5.zip',
+        'joomla-3.9.21' => 'http://m-host.net/data/cms/joomla-3.9.21.zip',
+        'typo3-11.5.5' => 'http://m-host.net/data/cms/typo3-11.5.5.zip',
+        'phpbb-3.3.1' => 'http://m-host.net/data/cms/phpbb-3.3.1.zip',
+        'mybb-1.8.24' => 'http://m-host.net/data/cms/mybb-1.8.24.zip',
     ];
 
     private $cms_configs = [
+        'wordpress-5.7.1-uk' => ['/wp-config.php'],
+        'wordpress-5.5.1-uk' => ['/wp-config.php'],
+        'wordpress-4.9.15-uk' => ['/wp-config.php'],
+        'wordpress-5.8.2-uk' => ['/wp-config.php'],
         'opencart-3.0.3.8' => ['/config.php', '/admin/config.php'],
         'opencart-3.0.3.6' => ['/config.php', '/admin/config.php'],
         'opencart-2.3.0.2' => ['/config.php', '/admin/config.php'],
         'ocstore-3.0.2.0' => ['/config.php', '/admin/config.php'],
         'ocstore-2.3.0.2.3' => ['/config.php', '/admin/config.php'],
-        'wordpress-5.7.1-uk' => ['/wp-config.php'],
-        'wordpress-5.5.1-uk' => ['/wp-config.php'],
-        'wordpress-4.9.15-uk' => ['/wp-config.php'],
-        'wordpress-5.8.2-uk' => ['/wp-config.php'],
-        'joomla-3.9.21' => ['/configuration.php'],
-        'drupal-9.0.5' => ['/sites/default/settings.php'],
         'prestashop-1.7.6.7' => ['/app/config/parameters.php','/mails/uk/order_conf.html','/.htaccess','/modules/ps_emailalerts/mails/uk/new_order.html','/modules/ps_emailalerts/mails/uk/return_slip.html',],
+        'drupal-9.0.5' => ['/sites/default/settings.php'],
+        'joomla-3.9.21' => ['/configuration.php'],
+        'typo3-11.5.5' => ['/typo3conf/LocalConfiguration.php'],
         'phpbb-3.3.1' => ['/config.php'],
         'mybb-1.8.24' => ['/inc/settings.php','/inc/config.php'],
     ];
@@ -149,7 +164,7 @@ class cms_installer
         if (!is_file($cms_file_zip_path)) {
 
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $cms_link);
+            curl_setopt($ch, CURLOPT_URL, $cms_link . '?no_cache=' . time());
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -198,9 +213,10 @@ class cms_installer
             }
         }
 
-        if (is_file($document_root . '/dump.sql')) {
-            $sql_dump = file_get_contents($document_root . '/dump.sql');
+        $sql_path = $document_root . '/dump.sql';
 
+        if (is_file($sql_path)) {
+            $sql_dump = file_get_contents($sql_path);
             $sql_dump = mb_convert_encoding($sql_dump, 'UTF-8');
 
             $sql_queries = explode(";\n", $sql_dump);
@@ -228,7 +244,7 @@ class cms_installer
                 }
             }
 
-            unlink($document_root . '/dump.sql');
+            unlink($sql_path);
         }
 
         unlink($cms_file_zip_path);
